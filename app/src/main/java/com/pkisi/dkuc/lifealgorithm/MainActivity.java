@@ -1,5 +1,6 @@
 package com.pkisi.dkuc.lifealgorithm;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -19,15 +20,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     private Cell[][] cells;
     private DrawerLayout drawerLayout;
-    Stage stage;
-    MainThread mainThread;
-    EditText speedField;
-    Integer animationSpeed = 500;
+    private Stage stage;
+    private MainThread mainThread;
+    private EditText speedField;
+    private Integer animationSpeed = 500;
+    private int width;
+    private int height;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_drawer_layout);
+
         speedField = findViewById(R.id.speedField);
 
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -49,11 +53,14 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             }
         };
         drawerLayout.addDrawerListener(toggle);
+
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
         toggle.syncState();
 
         stage = findViewById(R.id.mainStage);
+        width = stage.getGridWidth();
+        height = stage.getGridHeight();
         cells = stage.getCells();
 
         mainThread = new MainThread();
@@ -74,17 +81,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         public void run() {
             while (!isInterrupted()){
                 mutex.step();
-                int[][] neighbours = new int[24][17];
-                int[][] alive = new int[24][17];
-                int[][] dead = new int[24][17];
+                int[][] neighbours = new int[height][width];
+                int[][] alive = new int[height][width];
+                int[][] dead = new int[height][width];
 
 
-                for (int i = 0; i < 24; i++) {
-                    for (int j = 0; j < 17; j++) {
+                for (int i = 0; i < height; i++) {
+                    for (int j = 0; j < width; j++) {
 
                         for (int k = -1; k < 2; k++) {
                             for (int l = -1; l < 2; l++) {
-                                if ((i + k) > 0 && (i + k) < 24 && (j + l) > 0 && (j + l) < 17) {
+                                if ((i + k) > 0 && (i + k) < height && (j + l) > 0 && (j + l) < width) {
                                     if (cells[i + k][j + l].isAlive()) {
                                         if (i + k != i || j + l != j) {
                                             neighbours[i][j]++;
@@ -97,8 +104,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
                     }
                 }
-                for (int i = 0; i < 24; i++) {
-                    for (int j = 0; j < 17; j++) {
+                for (int i = 0; i < height; i++) {
+                    for (int j = 0; j < width; j++) {
                         if (cells[i][j].isAlive() && neighbours[i][j] > 3) {
                             dead[i][j] = 1;
                         }
@@ -137,9 +144,9 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     public void clearCells(){
-        cells = new Cell[24][17];
-        for (int i = 0; i < 24; i++) {
-            for (int j = 0; j < 17; j++) {
+        cells = new Cell[height][width];
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
                 Cell c = new Cell(false, j, i);
                 cells[i][j] = c;
             }
@@ -175,8 +182,16 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 clearCells();
                 stage.invalidate();
                 break;
+            case R.id.add:
+                drawerLayout.closeDrawer(GravityCompat.START);
+                stage.setAddition(true);
+                break;
+            case R.id.remove:
+                drawerLayout.closeDrawer(GravityCompat.START);
+                stage.setAddition(false);
+                break;
             case R.id.exit:
-
+                this.finish();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);

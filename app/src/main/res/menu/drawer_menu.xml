@@ -5,13 +5,19 @@
     <group android:checkableBehavior="single">
         <item android:id="@+id/resume"
             android:icon="@drawable/ic_start"
-            android:title="Resume life"></item>
+            android:title="@string/resume"></item>
         <item android:id="@+id/restart"
             android:icon="@drawable/ic_restart"
-            android:title="Restart life"></item>
+            android:title="@string/restart"></item>
+        <item android:id="@+id/add"
+            android:title="@string/add"
+            android:icon="@drawable/ic_add"></item>
+        <item android:id="@+id/remove"
+            android:title="@string/remove"
+            android:icon="@drawable/ic_delete"></item>
         <item android:id="@+id/exit"
-            android:icon="@drawable/ic_exit"
-            android:title="End life"></item>
+        android:icon="@drawable/ic_exit"
+        android:title="@string/exit"></item>
     </group>
 
 </menu>

@@ -1,6 +1,7 @@
 package com.pkisi.dkuc.lifealgorithm;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,14 +12,21 @@ import android.view.SurfaceView;
 
 public class Stage extends SurfaceView {
     private Paint paint;
-    private Cell[][] cells = new Cell[24][17];
-    int x;
-    int y;
-//60 x 34
+
+    private Cell[][] cells;// = new Cell[gridHeight][gridWidth];
+    private boolean addition;
+    private int gridWidth;
+    private int gridHeight;
+    private int x;
+    private int y;
+
     public Stage(Context context, AttributeSet attrs) {
         super(context, attrs);
-        for (int i = 0; i < 24; i++) {
-            for (int j = 0; j < 17; j++) {
+        gridWidth = Resources.getSystem().getDisplayMetrics().widthPixels/32;
+        gridHeight = Resources.getSystem().getDisplayMetrics().heightPixels/32;
+        cells = new Cell[gridHeight][gridWidth];
+        for (int i = 0; i < gridHeight; i++) {
+            for (int j = 0; j < gridWidth; j++) {
                 Cell c = new Cell(false, j, i);
                 cells[i][j] = c;
             }
@@ -30,26 +38,26 @@ public class Stage extends SurfaceView {
     }
 
     protected void onDraw(Canvas canvas) {
-        int widthLines = canvas.getWidth() / 64;
-        if (canvas.getWidth() % 64 != 0 && widthLines < (float) canvas.getWidth() / 64) {
-            widthLines++;
+        int gridWidthLines = canvas.getWidth() / 32;
+        if (canvas.getWidth() % 32 != 0 && gridWidthLines < (float) canvas.getWidth() / 32) {
+            gridWidthLines++;
         }
-        int heightLines = canvas.getHeight() / 64;
+        int gridHeightLines = canvas.getHeight() / 32;
 
 
         if (cells != null) {
-            for (int i = 0; i < 24; i++) {
-                for (int j = 0; j < 17; j++) {
+            for (int i = 0; i < gridHeight; i++) {
+                for (int j = 0; j < gridWidth; j++) {
                     if (cells[i][j] != null && cells[i][j].isAlive()) {
-                        canvas.drawRect(cells[i][j].getX() * 64, cells[i][j].getY() * 64, (cells[i][j].getX() + 1) * 64, (cells[i][j].getY() + 1) * 64, paint);
+                        canvas.drawRect(cells[i][j].getX() * 32, cells[i][j].getY() * 32, (cells[i][j].getX() + 1) * 32, (cells[i][j].getY() + 1) * 32, paint);
                     }
                 }
             }
-                for (int i = 0; i < widthLines; i++) {
-                    canvas.drawLine(64 * i, 0, 64 * i, canvas.getHeight(), paint);
+                for (int i = 0; i < gridWidthLines; i++) {
+                    canvas.drawLine(32 * i, 0, 32 * i, canvas.getHeight(), paint);
                 }
-                for (int i = 0; i < heightLines; i++) {
-                    canvas.drawLine(0, 64 * i, canvas.getWidth(), 64 * i, paint);
+                for (int i = 0; i < gridHeightLines; i++) {
+                    canvas.drawLine(0, 32 * i, canvas.getWidth(), 32 * i, paint);
                 }
         }
     }
@@ -72,26 +80,42 @@ public class Stage extends SurfaceView {
         this.cells = cells;
     }
 
+    public boolean isAddition() {
+        return addition;
+    }
 
+    public void setAddition(boolean addition) {
+        this.addition = addition;
+    }
+
+    public int getGridWidth() {
+        return gridWidth;
+    }
+
+    public void setGridWidth(int gridWidth) {
+        this.gridWidth = gridWidth;
+    }
+
+    public int getGridHeight() {
+        return gridHeight;
+    }
+
+    public void setGridHeight(int gridHeight) {
+        this.gridHeight = gridHeight;
+    }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        //Handler handler = new Handler();
-        x = (int)event.getX()/64;
-        y = (int)event.getY()/64;
-        /*Runnable r = new Runnable() {
-            @Override
-            public void run() {
+        x = (int)event.getX()/32;
+        y = (int)event.getY()/32;
+
+        if(x<gridWidth && y<gridHeight){
+            if(addition){
+                cells[y][x].setAlive(true);
+            }else{
                 cells[y][x].setAlive(false);
             }
-        };
-        if(event.getAction()==MotionEvent.ACTION_DOWN){
-            handler.postDelayed(r, ViewConfiguration.getLongPressTimeout());
         }
-        if(event.getAction()==MotionEvent.ACTION_UP||event.getAction()==MotionEvent.ACTION_MOVE){
-        }*/
-        cells[y][x].setAlive(true);
-        // NAPRAW TE WSPOZRZEDNE NAPRAW TE WSPOZRZEDNE NAPRAW TE WSPOZRZEDNE NAPRAW TE WSPOZRZEDNE NAPRAW TE WSPOZRZEDNE NAPRAW TE WSPOZRZEDNE NAPRAW TE WSPOZRZEDNE NAPRAW TE WSPOZRZEDNE
         invalidate();
         return true;
     }

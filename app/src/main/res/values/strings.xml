@@ -1,7 +1,13 @@
 <resources>
-    <string name="app_name">LifeAlgorithm</string>
+    <string name="app_name">Game of life By Daniel Kuć</string>
     <string name="menu">Menu</string>
     <string name="navigation_drawer_open">open</string>
     <string name="naviagtion_drawer_close">close</string>
-    <string name="speed_hint">Kliknij aby ustawić prędkość animacji[ms] (domyślnie 500)</string>
+    <string name="speed_hint">Kliknij aby ustawić prędkość animacji [ms] (domyślnie 500)</string>
+    <string name="resume">Resume life</string>
+    <string name="restart">Restart</string>
+    <string name="add">Add life</string>
+    <string name="remove">Delete life</string>
+    <string name="exit">Exit</string>
+
 </resources>

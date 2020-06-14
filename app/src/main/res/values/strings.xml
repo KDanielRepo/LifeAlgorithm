@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">LifeAlgorithm</string>
+    <string name="menu">Menu</string>
+    <string name="navigation_drawer_open">open</string>
+    <string name="naviagtion_drawer_close">close</string>
+    <string name="speed_hint">Kliknij aby ustawić prędkość animacji[ms] (domyślnie 500)</string>
+</resources>
